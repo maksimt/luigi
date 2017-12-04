@@ -61,3 +61,9 @@ class DictParameterTest(unittest.TestCase):
         a = luigi.DictParameter().normalize({"a": [{"b": []}]})
         b = luigi.DictParameter().normalize({"a": [{"b": []}]})
         self.assertEqual(hash(a), hash(b))
+
+    def test_nested_hash(self):
+        a = DictParameterTask({'a': 2, 'b': {'c': '3'}})
+        b = DictParameterTask({'b': {'c': '3'}, 'a': 2})
+        self.assertEquals(a.param.__hash__(), 5651538082574827812)
+        self.assertEquals(b.param.__hash__(), a.param.__hash__())
